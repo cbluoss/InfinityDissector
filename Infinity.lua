@@ -45,6 +45,9 @@ infinity_protocol.fields[#infinity_protocol.fields+1]=nibp_dia
 nibp_map = ProtoField.int8("infinity.data.nibp.map", "NIBP (MAP)", base.DEC)                        -- 0x018F
 infinity_protocol.fields[#infinity_protocol.fields+1]=nibp_map
 
+temperature = ProtoField.int16("infinity.data.temperature", "Temperature (in Celsius *10)", base.DEC) -- 0x00B6,2
+infinity_protocol.fields[#infinity_protocol.fields+1]=temperature
+
 RRsys = ProtoField.int16("infinity.RRsys", "RRsys", base.DEC)
 RRdia = ProtoField.int16("infinity.RRdia", "RRdia", base.DEC)
 RRmad = ProtoField.int16("infinity.RRmad", "RRmad", base.DEC)
@@ -84,6 +87,8 @@ function infinity_protocol.dissector(buffer, pinfo, tree)
     subtree:add(nibp_sys, buffer(0x0147,1)) 
     subtree:add(nibp_dia, buffer(0x016B,1)) 
     subtree:add(nibp_map, buffer(0x018F,1)) 
+    subtree:add(temperature, buffer(0x00B6,2)) 
+
 
 
   end
