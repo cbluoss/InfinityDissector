@@ -30,8 +30,8 @@ infinity_protocol.fields[#infinity_protocol.fields+1]=patient_name
 is_data = ProtoField.bool("infinity.packet.data", "Is Data")
 infinity_protocol.fields[#infinity_protocol.fields+1]=is_data
 
-respiratory_rate = ProtoField.int8("infinity.data.respiratory_rate", "Respiratory Rate", base.DEC)  -- 0x00DB
-infinity_protocol.fields[#infinity_protocol.fields+1]=respiratory_rate
+ecg_respiratory_rate = ProtoField.int8("infinity.data.ecg.respiratory_rate", "Respiratory Rate (ECG)", base.DEC)  -- 0x00DB
+infinity_protocol.fields[#infinity_protocol.fields+1]=ecg_respiratory_rate
 
 spo2 = ProtoField.int8("infinity.data.spo2", "sPO2", base.DEC)                                      -- 0x01FF
 infinity_protocol.fields[#infinity_protocol.fields+1]=spo2
@@ -78,7 +78,7 @@ function infinity_protocol.dissector(buffer, pinfo, tree)
 
   if length > 1000 then 
     subtree:add(is_data, true)
-  	subtree:add(respiratory_rate, buffer(0x00DB,1)) 
+  	subtree:add(ecg_respiratory_rate, buffer(0x00DB,1)) 
     subtree:add(spo2, buffer(0x01FF,1)) 
     subtree:add(spo2_pulse, buffer(0x0123,1)) 
     subtree:add(nibp_sys, buffer(0x0147,1)) 
