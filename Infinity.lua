@@ -32,6 +32,8 @@ infinity_protocol.fields[#infinity_protocol.fields+1]=is_data
 
 ecg_respiratory_rate = ProtoField.int8("infinity.data.ecg.respiratory_rate", "Respiratory Rate (ECG)", base.DEC)  -- 0x00DB
 infinity_protocol.fields[#infinity_protocol.fields+1]=ecg_respiratory_rate
+ecg_heart_rate = ProtoField.int8("infinity.data.ecg.heart_rate", "Heart Rate (ECG)", base.DEC)      -- 0x0027
+infinity_protocol.fields[#infinity_protocol.fields+1]=ecg_heart_rate
 
 spo2 = ProtoField.int8("infinity.data.spo2", "sPO2", base.DEC)                                      -- 0x01FF
 infinity_protocol.fields[#infinity_protocol.fields+1]=spo2
@@ -48,13 +50,7 @@ infinity_protocol.fields[#infinity_protocol.fields+1]=nibp_map
 temperature = ProtoField.int16("infinity.data.temperature", "Temperature (in Celsius *10)", base.DEC) -- 0x00B6,2
 infinity_protocol.fields[#infinity_protocol.fields+1]=temperature
 
-RRsys = ProtoField.int16("infinity.RRsys", "RRsys", base.DEC)
-RRdia = ProtoField.int16("infinity.RRdia", "RRdia", base.DEC)
-RRmad = ProtoField.int16("infinity.RRmad", "RRmad", base.DEC)
-NIBPsys = ProtoField.string("infinity.nibp.sys", "NIBP Systolic", base.ASCII)
 
-sPO2 = ProtoField.int16("infinity.sPO2", "sPO2", base.DEC)
-sPO2_P = ProtoField.int16("infinity.sPO2_P", "sPO2 Puls", base.DEC)
 
 infinity_protocol.fields = {RRsys, RRdia, RRmad, sPO2, sPO2_P, NIBPsys }
 
@@ -81,8 +77,9 @@ function infinity_protocol.dissector(buffer, pinfo, tree)
 
   if length > 1000 then 
     subtree:add(is_data, true)
-  	subtree:add(ecg_respiratory_rate, buffer(0x00DB,1)) 
-    subtree:add(spo2, buffer(0x01FF,1)) 
+  	subtree:add(ecg_respiratory_rate, buffer(0x00DB,1))
+    subtree:add(ecg_heart_rate, buffer(0x0027,1)) 
+    subtree:add(spo2, buffer(0x00FF,1)) 
     subtree:add(spo2_pulse, buffer(0x0123,1)) 
     subtree:add(nibp_sys, buffer(0x0147,1)) 
     subtree:add(nibp_dia, buffer(0x016B,1)) 
